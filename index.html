@@ -22,7 +22,7 @@
       --radius: 16px;
       --muted: #666;
       --border: #e6e6e6;
-      --accent: #0a84ff; /* single subtle accent */
+      --accent: #0a84ff;
     }
     @media (prefers-color-scheme: dark) {
       body { background: #0b0b0b; color: #f2f2f2; }
@@ -33,7 +33,6 @@
     a { color: inherit; text-decoration: none; }
     a:hover, a:focus-visible { text-decoration: underline; }
 
-    /* ==== Layout ==== */
     .container { max-width: var(--maxw); margin: 0 auto; padding: 2rem var(--gap); }
 
     header.site-header {
@@ -66,33 +65,47 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: #fff;
-      overflow: clip;
-      transition: box-shadow .2s ease;
+      overflow: hidden;
+      transition: box-shadow .25s ease, transform .15s ease;
     }
+    details.post:hover { box-shadow: 0 10px 25px rgba(0,0,0,.08); transform: translateY(-2px); }
     @media (prefers-color-scheme: dark) { details.post { background:#0f0f0f; } }
-    details.post:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); }
 
-    .thumb { aspect-ratio: 16/10; width: 100%; object-fit: cover; display:block; }
+    summary { list-style: none; cursor: pointer; display: grid; grid-template-rows: auto; }
+    summary::-webkit-details-marker { display: none; }
+
+    .thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      filter: brightness(0.95);
+      border-bottom: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+      transition: filter .3s ease;
+    }
+    details.post:hover .thumb { filter: brightness(1); }
 
     .post-summary { padding: 1rem; }
     .post-title { font-size: 1.05rem; font-weight: 700; margin: .25rem 0 .35rem; }
     .post-meta { font-size: .9rem; color: var(--muted); }
     .post-excerpt { margin-top: .5rem; color: inherit; }
+    .expand-hint { font-size: .85rem; color: var(--muted); }
 
     /* Expanded */
     details.post[open] { grid-column: 1 / -1; }
-    .post-body { padding: 0 1rem 1rem; max-width: 75ch; }
-    .hero { width: 100%; max-height: 70vh; object-fit: cover; border-bottom: 1px solid var(--border); }
+    .post-body { padding: 0 1rem 1.5rem; max-width: 70ch; margin: 0 auto; }
+    .hero {
+      width: 100%;
+      max-height: 60vh;
+      object-fit: cover;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
     .post-body h2 { font-size: clamp(1.25rem, 2.5vw, 1.6rem); margin: 1rem 0 .5rem; }
     .post-body p { margin: .75rem 0; }
 
     /* Footer */
     footer { margin: 3rem 0 2rem; text-align: center; color: var(--muted); font-size: .95rem; }
-
-    /* Buttons/controls */
-    summary { list-style: none; cursor: pointer; }
-    summary::-webkit-details-marker { display: none; }
-    .expand-hint { font-size: .85rem; color: var(--muted); }
 
     /* Utility */
     .visually-separated { border-top: 1px dashed var(--border); margin-top: 1rem; padding-top: .75rem; }
@@ -103,28 +116,25 @@
     <header class="site-header" role="banner">
       <h1 class="site-title">Letters From Elsewhere</h1>
       <nav class="socials" aria-label="Social links">
-        <!-- Replace the href values with your profiles -->
         <a class="chip" href="#" target="_blank" rel="me noopener noreferrer" title="Mastodon">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M21.1 7.2c0-4.2-2.7-5.4-2.7-5.4-1.3-.6-3.6-.9-5.9-.9h-.1c-2.3 0-4.6.3-5.9.9 0 0-2.7 1.3-2.7 5.4 0 1 .1 2.2.4 3.4 1.1 5 5.4 5.2 8.2 5.4h.2c2.8-.2 7.1-.4 8.2-5.4.3-1.2.4-2.4.4-3.4Zm-3.8 5.5h-2V8.7c0-1-.4-1.5-1.1-1.5-.9 0-1.3.6-1.3 1.8v2.7h-2V9c0-1.2-.4-1.8-1.3-1.8-.8 0-1.1.5-1.1 1.5v3.9h-2V8.6c0-1 .3-1.8.8-2.4.6-.7 1.5-1 2.6-1 1.3 0 2.2.5 2.8 1.4l.6 1 .6-1c.6-.9 1.5-1.4 2.8-1.4 1.1 0 2 .3 2.6 1 .5.6.8 1.4.8 2.4v4.1Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.1 7.2c0-4.2-2.7-5.4-2.7-5.4-1.3-.6-3.6-.9-5.9-.9h-.1c-2.3 0-4.6.3-5.9.9 0 0-2.7 1.3-2.7 5.4 0 1 .1 2.2.4 3.4 1.1 5 5.4 5.2 8.2 5.4h.2c2.8-.2 7.1-.4 8.2-5.4.3-1.2.4-2.4.4-3.4Zm-3.8 5.5h-2V8.7c0-1-.4-1.5-1.1-1.5-.9 0-1.3.6-1.3 1.8v2.7h-2V9c0-1.2-.4-1.8-1.3-1.8-.8 0-1.1.5-1.1 1.5v3.9h-2V8.6c0-1 .3-1.8.8-2.4.6-.7 1.5-1 2.6-1 1.3 0 2.2.5 2.8 1.4l.6 1 .6-1c.6-.9 1.5-1.4 2.8-1.4 1.1 0 2 .3 2.6 1 .5.6.8 1.4.8 2.4v4.1Z"/></svg>
           <span>Mastodon</span>
         </a>
         <a class="chip" href="#" target="_blank" rel="noopener noreferrer" title="Pixelfed">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm10 2H7a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm-5 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2.2A1.8 1.8 0 1 0 13.8 12 1.8 1.8 0 0 0 12 10.2Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm10 2H7a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm-5 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2.2A1.8 1.8 0 1 0 13.8 12 1.8 1.8 0 0 0 12 10.2Z"/></svg>
           <span>Pixelfed</span>
-        </a>
-        <a class="chip" href="#" target="_blank" rel="noopener noreferrer" title="Couchsurfing">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.5 6.6c.5.5.5 1.3-.1 1.8-2.7 2.3-5.9 3.4-9.6 3.4-1.5 0-3.1-.2-4.8-.6-.2 0-.5.1-.6.3-.1.2 0 .5.2.6 1.9 1.3 3.8 2.2 5.7 2.6 2.5.5 5 .3 7.5-.8.6-.2 1.3 0 1.6.6.3.6 0 1.3-.6 1.6-3.1 1.3-6.2 1.6-9.3 1-2.5-.5-5-1.6-7.5-3.4l-.3-.2c-.8-.5-1.1-1.6-.6-2.4.3-.5.9-.9 1.5-1 1.3.2 2.6.4 3.9.4 3.2 0 6-.9 8.5-2.9.6-.5 1.5-.4 2 .2Z"/></svg>
-          <span>Couchsurfing</span>
         </a>
       </nav>
     </header>
 
     <main id="content" class="content" role="main" aria-live="polite">
       <section class="posts" aria-label="Recent posts">
+
         <!-- === Post 1 === -->
         <details class="post">
           <summary>
-            <img class="thumb" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop" alt="Dawn light over minimalist mountains" loading="lazy" />
+            <img class="thumb" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800&auto=format&fit=crop" 
+                 alt="Dawn light over minimalist mountains" loading="lazy" />
             <div class="post-summary">
               <div class="post-meta">May 14, 2025 · Travel</div>
               <h2 class="post-title">Quiet Mornings in the Valley</h2>
@@ -132,7 +142,8 @@
               <div class="expand-hint">Click to read</div>
             </div>
           </summary>
-          <img class="hero" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2000&auto=format&fit=crop" alt="Wide photo of a minimalist mountain valley at dawn" />
+          <img class="hero" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2000&auto=format&fit=crop" 
+               alt="Wide photo of a minimalist mountain valley at dawn" />
           <div class="post-body">
             <h2>Quiet Mornings in the Valley</h2>
             <p>The trail was empty and the air was still. A thin ribbon of fog sat between the ridges, softening every edge. I brewed tea on a flat rock and watched the light move inch by inch across the valley floor.</p>
@@ -144,7 +155,8 @@
         <!-- === Post 2 === -->
         <details class="post">
           <summary>
-            <img class="thumb" src="https://images.unsplash.com/photo-1512203492609-8f7f05a3e8d9?q=80&w=1400&auto=format&fit=crop" alt="Minimalist desk with camera and notebook" loading="lazy" />
+            <img class="thumb" src="https://images.unsplash.com/photo-1512203492609-8f7f05a3e8d9?q=80&w=800&auto=format&fit=crop" 
+                 alt="Minimalist desk with camera and notebook" loading="lazy" />
             <div class="post-summary">
               <div class="post-meta">June 02, 2025 · Notes</div>
               <h2 class="post-title">On Packing Light</h2>
@@ -152,34 +164,14 @@
               <div class="expand-hint">Click to read</div>
             </div>
           </summary>
-          <img class="hero" src="https://images.unsplash.com/photo-1512203492609-8f7f05a3e8d9?q=80&w=2000&auto=format&fit=crop" alt="Large image of a minimal desk layout" />
+          <img class="hero" src="https://images.unsplash.com/photo-1512203492609-8f7f05a3e8d9?q=80&w=2000&auto=format&fit=crop" 
+               alt="Large image of a minimal desk layout" />
           <div class="post-body">
             <h2>On Packing Light</h2>
             <p>I’ve been trimming the day pack: water, phone, tiny tripod, and a compact camera. Most days I don’t miss the heavyweight lenses.</p>
             <p>The trade-off is simple: less strain, more wandering. If a shot needs a bigger setup, it can wait for another day.</p>
           </div>
         </details>
-
-        <!-- === Post 3 === -->
-        <details class="post">
-          <summary>
-            <img class="thumb" src="https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?q=80&w=1400&auto=format&fit=crop" alt="City street with soft evening light" loading="lazy" />
-            <div class="post-summary">
-              <div class="post-meta">July 18, 2025 · Street</div>
-              <h2 class="post-title">Evening Corners</h2>
-              <p class="post-excerpt">Corners and shadows as the city cools down.</p>
-              <div class="expand-hint">Click to read</div>
-            </div>
-          </summary>
-          <img class="hero" src="https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?q=80&w=2000&auto=format&fit=crop" alt="Large city street scene at dusk" />
-          <div class="post-body">
-            <h2>Evening Corners</h2>
-            <p>Blocks I’ve walked a hundred times still surprise me. The same walls, new light. That’s enough.</p>
-            <p>Shot handheld. ISO higher than I’d like, but the grain fits the mood.</p>
-          </div>
-        </details>
-<!-- === Post 4 === -->
-        testestest
 
       </section>
     </main>
@@ -193,7 +185,7 @@
     // Update year automatically
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // OPTIONAL: Smooth-close other posts when one opens (accordion behavior)
+    // Accordion behavior
     const posts = Array.from(document.querySelectorAll('details.post'));
     posts.forEach((d) => {
       d.addEventListener('toggle', () => {
